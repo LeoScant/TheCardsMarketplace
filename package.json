@@ -1,0 +1,27 @@
+{
+  "name": "windsurf-project",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "frontend": "pnpm --filter cards-marketplace-fe",
+    "backend": "pnpm --filter cards-marketplace-be",
+    "smart-contract": "pnpm --filter cards-marketplace-sc",
+    "dev": "concurrently \"pnpm frontend dev\" \"pnpm backend start\"",
+    "build": "pnpm -r run build",
+    "test": "pnpm -r run test",
+    "lint": "pnpm -r run lint",
+    "clean": "pnpm -r run clean"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "lerna": "^8.0.0"
+  },
+  "engines": {
+    "node": ">=22.0.0",
+    "pnpm": ">=8.0.0"
+  },
+  "packageManager": "pnpm@8.12.1"
+}
