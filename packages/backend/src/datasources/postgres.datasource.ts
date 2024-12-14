@@ -10,7 +10,7 @@ const config = {
   user: process.env.DB_USERNAME,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
-  ssl: process.env.DB_HOST !== 'localhost',
+  ssl: false,
   connectionTimeoutMillis: 5000,
   max: 20,
   idleTimeoutMillis: 30000,
