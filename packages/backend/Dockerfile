@@ -25,8 +25,6 @@ RUN pnpm run build
 
 # Bind to all network interfaces
 ENV HOST=0.0.0.0
-# Use Render's default port
-ENV PORT=10000
 
-EXPOSE ${PORT}
+EXPOSE 10000
 CMD [ "pnpm", "start" ]

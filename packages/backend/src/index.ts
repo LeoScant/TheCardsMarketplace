@@ -1,4 +1,4 @@
-import {ApplicationConfig, CardsMarketplaceBeApplication} from './application';
+import { ApplicationConfig, CardsMarketplaceBeApplication } from './application';
 
 export * from './application';
 
@@ -14,19 +14,13 @@ export async function main(options: ApplicationConfig = {}) {
 }
 
 if (require.main === module) {
-  // Run the application
+  // Run the application with configurations
   const config = {
     rest: {
       port: +(process.env.PORT ?? 8000),
       host: process.env.HOST ?? '0.0.0.0',
-      // The `gracePeriodForClose` provides a graceful close for http/https
-      // servers with keep-alive clients. The default value is `Infinity`
-      // (don't force-close). If you want to immediately destroy all sockets
-      // upon stop, set its value to `0`.
-      // See https://www.npmjs.com/package/stoppable
       gracePeriodForClose: 5000, // 5 seconds
       openApiSpec: {
-        // useful when used with OpenAPI-to-GraphQL to locate your application
         setServersFromRequest: true,
       },
     },
