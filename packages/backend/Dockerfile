@@ -23,8 +23,10 @@ COPY --chown=node . .
 
 RUN pnpm run build
 
-# Bind to all network interfaces so that it can be mapped to the host OS
-ENV HOST=0.0.0.0 PORT=3000
+# Bind to all network interfaces
+ENV HOST=0.0.0.0
+# Use Render's default port
+ENV PORT=10000
 
 EXPOSE ${PORT}
 CMD [ "pnpm", "start" ]

@@ -23,7 +23,10 @@ export class CardsMarketplaceBeApplication extends BootMixin(
   ServiceMixin(RepositoryMixin(RestApplication)),
 ) {
   constructor(options: ApplicationConfig = {}) {
-    dotenv.config();
+    options.rest = options.rest ?? {};
+    options.rest.host = process.env.HOST ?? '0.0.0.0';
+    options.rest.port = +(process.env.PORT ?? 8000);
+    
     super(options);
 
     // Set up the custom sequence
