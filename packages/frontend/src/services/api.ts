@@ -1,4 +1,4 @@
-// services/api.js
+// services/api.ts
 import axios from 'axios';
 import useStore from '../store/store';
 
@@ -19,5 +19,10 @@ api.interceptors.request.use((config) => {
 }, (error) => {
   return Promise.reject(error);
 });
+
+export const checkHealth = async (): Promise<{ status: string; timestamp: string }> => {
+  const response = await api.get('/health');
+  return response.data;
+};
 
 export default api;
