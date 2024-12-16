@@ -29,10 +29,10 @@ export class LikedCards extends Entity {
   })
   updatedat?: string;
 
-  @belongsTo(() => Cards)
+  @belongsTo(() => Cards, {keyTo: 'id', keyFrom: 'card_id'})
   cardId: number;
 
-  @belongsTo(() => Users)
+  @belongsTo(() => Users, {keyTo: 'id', keyFrom: 'user_id'})
   userId: number;
 
   [prop: string]: any;
