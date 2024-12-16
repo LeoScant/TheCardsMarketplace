@@ -102,7 +102,7 @@ export class Users extends Entity {
   })
   nonce?: string;
 
-  @hasMany(() => Cards, {through: {model: () => LikedCards, keyFrom: 'userId', keyTo: 'cardId'}})
+  @hasMany(() => Cards, {through: {model: () => LikedCards, keyFrom: 'user_id', keyTo: 'card_id'}})
   likedCards: Cards[];
 
   @hasMany(() => Cards, {keyTo: 'ownerId'})

@@ -112,7 +112,7 @@ export class Cards extends Entity {
   })
   tokenId?: string;
 
-  @hasMany(() => Users, {through: {model: () => LikedCards, keyFrom: 'cardId', keyTo: 'userId'}})
+  @hasMany(() => Users, {through: {model: () => LikedCards, keyFrom: 'card_id', keyTo: 'user_id'}})
   users?: Users[];
 
   @belongsTo(() => Users,)
