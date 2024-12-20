@@ -102,16 +102,25 @@ export class Users extends Entity {
   })
   nonce?: string;
 
-  @hasMany(() => Cards, {through: {model: () => LikedCards, keyFrom: 'user_id', keyTo: 'card_id'}})
+  @hasMany(() => Cards, {
+    through: {
+      model: () => LikedCards,
+      keyFrom: 'user_id',
+      keyTo: 'card_id'
+    },
+    name: 'likedCards',
+    keyTo: 'id'
+  })
   likedCards: Cards[];
 
-  @hasMany(() => Cards, {keyTo: 'ownerId'})
+  @hasMany(() => Cards, {
+    keyFrom: 'id',
+    keyTo: 'owner_id',
+    name: 'ownedCards'
+  })
   ownedCards: Cards[];
-  // Define well-known properties here
 
-  // Indexer property to allow additional data
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  [prop: string]: any;
+  // Define well-known properties here
 
   constructor(data?: Partial<Users>) {
     super(data);
@@ -119,7 +128,8 @@ export class Users extends Entity {
 }
 
 export interface UsersRelations {
-  // describe navigational properties here
+  likedCards?: Cards[];
+  ownedCards?: Cards[];
 }
 
 export type UsersWithRelations = Users & UsersRelations;

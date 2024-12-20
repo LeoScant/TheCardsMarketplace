@@ -1,6 +1,6 @@
 import {Entity, belongsTo, hasMany, model, property} from '@loopback/repository';
 import {LikedCards} from './liked-cards.model';
-import {Users} from './users.model';
+import {Users, UsersWithRelations} from './users.model';
 
 @model({settings: {idInjection: false, postgresql: {schema: 'public', table: 'cards'}}})
 export class Cards extends Entity {
@@ -115,13 +115,13 @@ export class Cards extends Entity {
   @hasMany(() => Users, {through: {model: () => LikedCards, keyFrom: 'card_id', keyTo: 'user_id'}})
   users?: Users[];
 
-  @belongsTo(() => Users,)
-  ownerId?: number;
+  @belongsTo(() => Users, {
+    name: 'owner',
+    keyFrom: 'owner_id',
+    keyTo: 'id'
+  })
+  owner_id: number;
   // Define well-known properties here
-
-  // Indexer property to allow additional data
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  [prop: string]: any;
 
   constructor(data?: Partial<Cards>) {
     super(data);
@@ -130,6 +130,8 @@ export class Cards extends Entity {
 
 export interface CardsRelations {
   // describe navigational properties here
+  owner?: UsersWithRelations;
+  users?: UsersWithRelations[];
 }
 
 export type CardsWithRelations = Cards & CardsRelations;

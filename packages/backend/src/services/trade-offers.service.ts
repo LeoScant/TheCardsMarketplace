@@ -15,7 +15,10 @@ export class TradeOffersService {
 
   // This function is called to see all trade offers for a user
   async getTradeOffersByUserTo(userId: number) {
-    return this.tradeOffersRepository.find({where: {to: userId}, include: ['cardFromRel', 'cardToRel', 'userFrom']});
+    return this.tradeOffersRepository.find({
+      where: {to: userId},
+      include: ['cardFromRel', 'cardToRel', 'userFrom', 'userTo']
+    });
   }
 
   // This function is called to create a new trade offer
@@ -25,9 +28,9 @@ export class TradeOffersService {
 
     if (!cardFrom) throw new Error('Card from not found');
     if (!cardTo) throw new Error('Card to not found');
-    if (cardFrom.ownerId !== userFromId) throw new Error('User is not the owner of the card');
+    if (cardFrom.owner_id !== userFromId) throw new Error('User is not the owner of the card');
 
-    return this.tradeOffersRepository.create({cardFrom: cardFromId, cardTo: cardToId, to: cardTo.ownerId, from: userFromId});
+    return this.tradeOffersRepository.create({card_from: cardFromId, card_to: cardToId, to: cardTo.owner_id, from: userFromId});
   }
 
   // This function is called when a user wants to accept a trade offer
@@ -37,20 +40,20 @@ export class TradeOffersService {
     if (!tradeOffer) throw new Error('Trade offer not found');
     if (tradeOffer.to !== userToId) throw new Error('User is not the userTo of the trade offer');
 
-    const cardFrom = await this.cardService.getCardById(tradeOffer.cardFrom);
-    const cardTo = await this.cardService.getCardById(tradeOffer.cardTo);
+    const cardFrom = await this.cardService.getCardById(tradeOffer.card_from);
+    const cardTo = await this.cardService.getCardById(tradeOffer.card_to);
 
     if (!cardFrom) throw new Error('Card from not found');
     if (!cardTo) throw new Error('Card to not found');
 
-    const cardFromOwnerId = cardFrom.ownerId;
-    const cardToOwnerId = cardTo.ownerId;
+    const cardFromOwnerId = cardFrom.owner_id;
+    const cardToOwnerId = cardTo.owner_id;
 
     // Swap the owners of the cards
-    cardFrom.ownerId = cardToOwnerId;
-    cardTo.ownerId = cardFromOwnerId;
+    cardFrom.owner_id = cardToOwnerId;
+    cardTo.owner_id = cardFromOwnerId;
 
-    if (cardFrom.tokenId && cardTo.tokenId && cardFrom.owner.walletAddress && cardTo.owner.walletAddress) {
+    if (cardFrom.tokenId && cardTo.tokenId && cardFrom.owner?.walletAddress && cardTo.owner?.walletAddress) {
       // Check if our wallet has been approved to transfer the NFTs
       const approvedAddress1 = await getApproved(cardFrom.tokenId)
       if (approvedAddress1 !== process.env.ETH_ADDRESS) throw new Error('Trade not approved');
@@ -63,8 +66,8 @@ export class TradeOffersService {
     }
 
     // Update the owners of the cards
-    await this.cardService.cardRepository.updateById(cardFrom.id, {ownerId: cardToOwnerId});
-    await this.cardService.cardRepository.updateById(cardTo.id, {ownerId: cardFromOwnerId});
+    await this.cardService.cardRepository.updateById(cardFrom.id, {owner_id: cardToOwnerId});
+    await this.cardService.cardRepository.updateById(cardTo.id, {owner_id: cardFromOwnerId});
 
     // Delete the trade offer
     await this.tradeOffersRepository.deleteById(tradeOfferId);

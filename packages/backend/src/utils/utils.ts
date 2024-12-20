@@ -150,14 +150,14 @@ export const getApproved = async (tokenId: string) => {
 
 /**
  * Transfers an NFT from one address to another safely.
- *
+ * 
  * @param from The address of the current owner of the NFT.
  * @param to The address of the new owner of the NFT.
  * @param tokenId The ID of the NFT to be transferred.
  * @returns A Promise that resolves to the raw transaction object.
  * @throws {HttpErrors.InternalServerError} If there is an error during the transfer process.
  */
-export const safeTransferFrom = async (from: number, to: number, tokenId: string) => {
+export const safeTransferFrom = async (from: string, to: string, tokenId: string) => {
   const contract = getContract()
   try {
     let rawTxn = await contract.safeTransferFrom(from, to, tokenId)

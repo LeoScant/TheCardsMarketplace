@@ -28,7 +28,7 @@ export class CardService {
 
   // This function is called when a user wants to see their own cards
   async getCardsByOwner(userId: number) {
-    return await this.cardRepository.find({where: {ownerId: userId}});
+    return await this.cardRepository.find({where: {owner_id: userId}});
   }
 
   // This function is called when a user likes or unlikes a card
@@ -55,7 +55,7 @@ export class CardService {
       console.log('Creating card with data:', { card, walletAddress, userId });
       
       // Set the user as the owner of the card
-      card.ownerId = userId;
+      card.owner_id = userId;
 
       // Upload the card to IPFS
       console.log('Uploading to IPFS...');
@@ -85,7 +85,7 @@ export class CardService {
     // Check if card exists and if the user is the owner of the card
     const card = await this.cardRepository.findById(cardId);
     if (!card) throw new Error('Card not found');
-    if (card.ownerId !== userId) throw new Error('User is not the owner of the card');
+    if (card.owner_id !== userId) throw new Error('User is not the owner of the card');
 
     // Burn the NFT and delete the card from the DB
     if (card.tokenId) await burnNFT(card.tokenId);

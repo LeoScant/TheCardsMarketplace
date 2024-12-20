@@ -19,12 +19,23 @@ export class UsersRepository extends DefaultCrudRepository<
   public readonly ownedCards: HasManyRepositoryFactory<Cards, typeof Users.prototype.id>;
 
   constructor(
-    @inject('datasources.postgres') dataSource: PostgresDataSource, @repository.getter('LikedCardsRepository') protected likedCardsRepositoryGetter: Getter<LikedCardsRepository>, @repository.getter('CardsRepository') protected cardsRepositoryGetter: Getter<CardsRepository>,
+    @inject('datasources.postgres') dataSource: PostgresDataSource,
+    @repository.getter('LikedCardsRepository') protected likedCardsRepositoryGetter: Getter<LikedCardsRepository>,
+    @repository.getter('CardsRepository') protected cardsRepositoryGetter: Getter<CardsRepository>,
   ) {
     super(Users, dataSource);
-    this.ownedCards = this.createHasManyRepositoryFactoryFor('ownedCards', cardsRepositoryGetter,);
-    this.registerInclusionResolver('ownedCards', this.ownedCards.inclusionResolver);
-    this.likedCards = this.createHasManyThroughRepositoryFactoryFor('likedCards', cardsRepositoryGetter, likedCardsRepositoryGetter,);
+
+    this.likedCards = this.createHasManyThroughRepositoryFactoryFor(
+      'likedCards',
+      cardsRepositoryGetter,
+      likedCardsRepositoryGetter
+    );
     this.registerInclusionResolver('likedCards', this.likedCards.inclusionResolver);
+
+    this.ownedCards = this.createHasManyRepositoryFactoryFor(
+      'ownedCards',
+      cardsRepositoryGetter
+    );
+    this.registerInclusionResolver('ownedCards', this.ownedCards.inclusionResolver);
   }
 }

@@ -29,13 +29,19 @@ export class LikedCards extends Entity {
   })
   updatedat?: string;
 
-  @belongsTo(() => Cards, {keyTo: 'id', keyFrom: 'card_id'})
-  cardId: number;
+  @belongsTo(() => Cards, {
+    name: 'card',
+    keyFrom: 'card_id',
+    keyTo: 'id'
+  })
+  card_id: number;
 
-  @belongsTo(() => Users, {keyTo: 'id', keyFrom: 'user_id'})
-  userId: number;
-
-  [prop: string]: any;
+  @belongsTo(() => Users, {
+    name: 'user',
+    keyFrom: 'user_id',
+    keyTo: 'id'
+  })
+  user_id: number;
 
   constructor(data?: Partial<LikedCards>) {
     super(data);
@@ -43,7 +49,8 @@ export class LikedCards extends Entity {
 }
 
 export interface LikedCardsRelations {
-  // describe navigational properties here
+  card?: Cards;
+  user?: Users;
 }
 
 export type LikedCardsWithRelations = LikedCards & LikedCardsRelations;
